@@ -1,0 +1,60 @@
+{
+  "name": "sequelize_error_repro",
+  "version": "1.0.0",
+  "engines": {
+    "node": "10.1.0"
+  },
+  "description": "Reproduction repo for sequelize error in mocha test",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel server/src -d server/lib",
+    "heroku-postbuild": "npm run build && sequelize db:migrate:undo:all --env=production && sequelize db:migrate --env=production",
+    "pretest": "npm run refresh:test",
+    "test": "cross-env NODE_ENV=test nyc mocha -t 5000 --exit --recursive -r esm",
+    "test:babel": "cross-env NODE_ENV=test nyc mocha --exit --recursive -r babel-polyfill -r babel-register",
+    "lint": "eslint src/**/*.js --fix",
+    "migrate": "sequelize db:migrate",
+    "migrate:test": "sequelize db:migrate --env=test",
+    "drop": "sequelize db:migrate:undo:all",
+    "drop:test": "sequelize db:migrate:undo:all --env=test",
+    "seed": "sequelize db:seed:all",
+    "seed:test": "sequelize db:seed:all --env=test",
+    "refresh": "npm run drop && npm run migrate && npm run seed",
+    "refresh:test": "npm run drop:test && npm run migrate:test && npm run seed:test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozimos/sequelize_error_repro.git"
+  },
+  "author": "Tovieye Moses Ozi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ozimos/sequelize_error_repro/issues"
+  },
+  "homepage": "https://github.com/ozimos/sequelize_error_repro#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "cross-env": "^5.1.4",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "mocha": "^5.1.1",
+    "nyc": "^11.7.1",
+    "sequelize-cli": "^4.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "esm": "^3.0.24",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.37.7"
+  }
+}
